@@ -1,0 +1,22 @@
+#minesweeper {
+  border: 2px solid black;
+  width: 120px;
+  margin: 30px auto;
+}
+
+.section {
+  /* margin-right: -4px; */
+  height: 30px;
+  width: 30px;
+}
+
+.section:focus {
+  outline: none;
+}
+
+.clicked {
+  background: white;
+  border-color: white;
+  border-style: solid;
+	/* border-style: outset; */
+}
