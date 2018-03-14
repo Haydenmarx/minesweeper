@@ -4,6 +4,17 @@
   margin: 30px auto;
 }
 
+#reset {
+  width: 50px;
+  margin: 5px;
+}
+
+#minesweeper > div > span {
+  float: right;
+  margin-top: 8px;
+  margin-right: 30px;
+}
+
 .section {
   /* margin-right: -4px; */
   height: 30px;
