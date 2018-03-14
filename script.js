@@ -124,7 +124,7 @@ class MineSweeper {
     gameboard.style.width = this.width * 30 + 'px';
     let squares = "";
     for (var x = 0; x < this.width * this.height; x++) {
-      squares +='<button id="square' + x + '" class="section">?</button>';
+      squares +='<button id="square' + x + '" class="section">&nbsp</button>';
     }
     gameboard.innerHTML = squares;
     // document.getElementById("mine")
@@ -327,13 +327,26 @@ class MineSweeper {
 
 
 document.getElementById("minesweeper").addEventListener("click", function(item) {
-  // console.log(item, item.target);
-  
-  item.target.className += " clicked";
-  // item.target.innerText = "9";
-  test.selectSquare(item.target.id.slice(6));
-  // console.log(test.selectSquare, item.target.id.slice(6));
+  if (item.target.classList.contains('section') && item.target.classList.contains('clicked') === false
+  && item.target.classList.contains('mine') === false) {
+    item.target.className += " clicked";
+    test.selectSquare(item.target.id.slice(6));
+    
+  }
 })
+
+document.getElementById("minesweeper").addEventListener( "contextmenu", function(e) {
+  e.preventDefault();
+  if (e.target.classList.contains('clicked') === false) {
+    if(e.target.classList.contains('mine')) {
+      e.target.innerHTML = '&nbsp';
+      e.target.classList.remove('mine');
+    } else {
+      e.target.className += ' mine';
+      e.target.innerText = '!';
+    }
+  }
+});
 
 var test = new MineSweeper(200, 20, 20);
 test.setUp();
