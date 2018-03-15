@@ -2,6 +2,7 @@
 class MineSweeper {
   constructor (mines = 0, height = 4, width = 6) {
     this.mines = mines;
+    this.squaresLeft = height * width - mines;
     this.time = 0;
     this.gameClock = null;
     this.gameover = false;
@@ -127,7 +128,7 @@ class MineSweeper {
     let gameboard = game.children[1];
 
     game.style.width = this.width * 30 + 'px';
-    document.getElementById("reset").style.marginLeft = (this.width * 30)/2 +'px';
+    document.getElementById("reset").style.marginLeft = (this.width * 30)/2 -50 +'px';
     let squares = "";
     for (var x = 0; x < this.width * this.height; x++) {
       squares +='<button id="square' + x + '" class="section">&nbsp</button>';
@@ -159,6 +160,7 @@ class MineSweeper {
       } else {
         selection.innerText = this.values[num];
       }
+      this.squaresLeft--;
       this.expand(num)
     }
   }
@@ -200,6 +202,7 @@ class MineSweeper {
         selection.innerText = this.values[num - this.width];
       }
       selection.className += " clicked";
+      this.squaresLeft--;          
       this.clicked[num - this.width] = true;
       this.expand(num - this.width);
     }
@@ -214,6 +217,7 @@ class MineSweeper {
         selection.innerText = this.values[num - 1];
       }
       selection.className += " clicked";
+      this.squaresLeft--;          
       this.clicked[num - 1] = true;
       this.expand(num - 1);
     }
@@ -228,6 +232,7 @@ class MineSweeper {
         selection.innerText = this.values[num + 1];
       }
       selection.className += " clicked";
+      this.squaresLeft--;        
       this.clicked[num + 1] = true;
       this.expand(num + 1);
     }
@@ -242,8 +247,13 @@ class MineSweeper {
         selection.innerText = this.values[num + this.width];
       }
       selection.className += " clicked";
+      this.squaresLeft--;    
       this.clicked[num + this.width] = true;
       this.expand(num + this.width);
+    }
+    console.log(this.squaresLeft);
+    if (this.squaresLeft === 0) {
+      document.getElementById('minesweeper').style.background = 'green';
     }
   }
 
@@ -327,15 +337,17 @@ class MineSweeper {
 //   }
   
   setUp() {
+    document.getElementById("minesweeper").firstElementChild.children[0].innerText = this.mines;          
     this.createValues();
     this.createBoard();
     this.displayBoard();
   }
 
   startTimer() {
+    
     this.gameClock = setInterval(()=>{
       this.time++;
-      document.getElementById("minesweeper").firstElementChild.children[1].innerText = this.time;
+      document.getElementById("minesweeper").firstElementChild.children[2].innerText = this.time;
     },1000)
 
   }
@@ -358,7 +370,7 @@ document.getElementById("minesweeper").addEventListener("click", function(item) 
   if (item.target.id === 'reset') {
     newGame.stopTimer();
     newGame = new MineSweeper(200, 20, 20);
-    document.getElementById("minesweeper").firstElementChild.children[1].innerText = 0;
+    document.getElementById("minesweeper").firstElementChild.children[2].innerText = 0;
 
     this.gameover = false;
     newGame.setUp();
@@ -371,14 +383,17 @@ document.getElementById("minesweeper").addEventListener( "contextmenu", function
     if(e.target.classList.contains('mine')) {
       e.target.innerHTML = '&nbsp';
       e.target.classList.remove('mine');
+      document.getElementById("minesweeper").firstElementChild.children[0].innerText = Number(document.getElementById("minesweeper").firstElementChild.children[0].innerText) + 1;      
     } else {
       e.target.className += ' mine';
       e.target.innerText = '!';
+      document.getElementById("minesweeper").firstElementChild.children[0].innerText -= 1;      
+      
     }
   }
 });
 
-var newGame = new MineSweeper(200, 20, 20);
+var newGame = new MineSweeper(13, 9, 7);
 newGame.setUp();
 
 

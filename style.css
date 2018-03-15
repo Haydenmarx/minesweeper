@@ -9,7 +9,16 @@
   margin: 5px;
 }
 
-#minesweeper > div > span {
+#minesweeper:first-child {
+  background: #d1cacae3;
+} 
+
+#minesweeper > div >span:nth-child(1) {
+  margin-top: 8px;
+  margin-left: 30px;
+}
+
+#minesweeper > div >span:nth-child(3) {
   float: right;
   margin-top: 8px;
   margin-right: 30px;
