@@ -5,7 +5,30 @@
   <div id="minesweeper">
     <div><span>0</span><button id="reset">😁</button><span>0</span></div>
     <!-- 😎😄😁😂😆🤔😣☹☹️ -->
-    <div class="board"></div>
+    <form id="newGame" draggable="true">
+      <div>
+        <p>Custom</p>
+        <!-- <button>X</button> -->
+      </div>
+      <!-- * | S | M | L | XL -->
+
+      <!-- * | S | M  -->      
+      <!--   L | XL -->                  
+
+      <!-- Custom | Small | Medium | Large | XL -->
+      <!-- As Radio Buttons. Non-custom disables inputs -->
+      <label>Mines:&nbsp;</label>
+      <input/>
+      <br>
+      <label>Height:</label>
+      <input/>
+      <br>
+      <label>Width:&nbsp;</label>
+      <input/>
+      <br>
+      <button type="submit">Start</button><button type="reset">Cancel</button>
+    </form>
+    <div class="board"></div>    
   </div>
   <script src="./script.js"></script>
 </body>

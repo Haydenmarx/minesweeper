@@ -103,18 +103,8 @@ class MineSweeper {
     for (var x = 0; x < this.height * this.width; x++) {
       this.clicked.push(false);
     }
-    // for (var x = 0; x < this.height; x++) {
-    //   let row = [];
-    //   for (var y = 0; y < this.width; y++) {
-    //    let num = String(x * this.width + y + 1);
-    //    num.length === 1 ? num = '000' + num :
-    //    num.length === 2 ? num = '00' + num :
-    //    num.length === 3 ? num = '0' + num : false;
-    //    row.push(num);
-    //   }
-    //   this.board.push(row);
-    // }    
   }
+
   displayValues () {
     console.log('--------------------------------')
     console.log('|', this.values[0], '|', this.values[1], '|', this.values[2], '|', this.values[3], '|')
@@ -125,21 +115,15 @@ class MineSweeper {
 
   displayBoard () {
     let game = document.getElementById("minesweeper");
-    let gameboard = game.children[1];
-
+    let gameboard = game.children[2];
+    console.log('test', game.children);
     game.style.width = this.width * 30 + 'px';
-    document.getElementById("reset").style.marginLeft = (this.width * 30)/2 -50 +'px';
+    document.getElementById("reset").style.marginLeft = (this.width * 30)/2 - 65 +'px';
     let squares = "";
     for (var x = 0; x < this.width * this.height; x++) {
       squares +='<button id="square' + x + '" class="section">&nbsp</button>';
     }
     gameboard.innerHTML = squares;
-    // document.getElementById("mine")
-    // console.log('--------------------------------')
-    // for (var x = 0; x < this.board.length; x++) {
-    //   console.log(JSON.stringify(this.board[x]),'\n');
-    // }
-    // console.log('--------------------------------')
   }
 
   selectSquare(num) {
@@ -148,46 +132,24 @@ class MineSweeper {
     console.log(this.values);
     this.clicked[num] = true;
     console.log(this.clicked, num, this.clicked[num]);
+    
     if (this.values[num] === true) {
       this.stopTimer();
       this.gameover = true;
+      document.getElementById('reset').innerText = '😆';
       selection.innerText = '*';
       selection.style.background = 'red';
       selection.style.borderColor = 'red';
     } else {
       if (this.values[num] === 0) {
         selection.innerHTML = '&nbsp';
+        this.expand(num);
       } else {
         selection.innerText = this.values[num];
       }
       this.squaresLeft--;
-      this.expand(num)
     }
   }
-
-//   selectSquare(num) {
-//     num +=1;
-//     let row = parseInt((num - 1)/this.width);
-//     let column = num - (row * this.width) - 1;
-//     if (this.values[num - 1] === true) {
-//       this.board[row][column] = 'BOOM'
-//     } else {
-//       if (this.values[num - 1] === 0) {
-//         this.board[row][column] = '    ';
-//       } else {
-//         this.board[row][column]= '  ' + this.values[num - 1] +  ' ';
-//       }
-// /*
-//       console.log('up', this.board[row][column]);
-//       console.log('down', this.board[row + 1][column]);
-//       console.log('left', this.board[row][column - 1]);
-//       console.log('right', this.board[row][column + 1]);
-// */
-//       this.expand(row, column);
-//     }
-//     // console.log(this.board[row][column + 1][0])
-//     this.displayBoard();
-//   }
 
   expand(num) {
     num = Number(num);
@@ -198,13 +160,14 @@ class MineSweeper {
       let selection = document.getElementById(square);
       if (this.values[num - this.width] === 0) {
         selection.innerHTML = '&nbsp';
+        this.expand(num - this.width);
       } else {
         selection.innerText = this.values[num - this.width];
       }
       selection.className += " clicked";
       this.squaresLeft--;          
       this.clicked[num - this.width] = true;
-      this.expand(num - this.width);
+      // this.expand(num - this.width);
     }
 
     //left
@@ -213,13 +176,14 @@ class MineSweeper {
       let selection = document.getElementById(square);
       if (this.values[num - 1] === 0) {
         selection.innerHTML = '&nbsp';
+        this.expand(num - 1);
       } else {
         selection.innerText = this.values[num - 1];
       }
       selection.className += " clicked";
       this.squaresLeft--;          
       this.clicked[num - 1] = true;
-      this.expand(num - 1);
+      // this.expand(num - 1);
     }
 
     //right
@@ -228,13 +192,14 @@ class MineSweeper {
       let selection = document.getElementById(square);
       if (this.values[num + 1] === 0) {
         selection.innerHTML = '&nbsp';
+        this.expand(num + 1);
       } else {
         selection.innerText = this.values[num + 1];
       }
       selection.className += " clicked";
       this.squaresLeft--;        
       this.clicked[num + 1] = true;
-      this.expand(num + 1);
+      // this.expand(num + 1);
     }
 
     //down
@@ -243,101 +208,26 @@ class MineSweeper {
       let selection = document.getElementById(square);
       if (this.values[num + this.width] === 0) {
         selection.innerHTML = '&nbsp';
+        this.expand(num + this.width);
       } else {
         selection.innerText = this.values[num + this.width];
       }
       selection.className += " clicked";
       this.squaresLeft--;    
       this.clicked[num + this.width] = true;
-      this.expand(num + this.width);
+      // this.expand(num + this.width);
     }
     console.log(this.squaresLeft);
     if (this.squaresLeft === 0) {
-      document.getElementById('minesweeper').style.background = 'green';
+      document.getElementById('reset').innerText = '😎';
+      this.stopTimer();
+      this.gameover = true;
     }
   }
 
-//   expand(row, column) {
-
-//     //up
-//     if (this.board[row - 1] !== undefined) {
-//       if (this.board[row - 1][column] !== undefined &&
-//           this.board[row - 1][column] !== '    ' &&
-//           this.board[row - 1][column][0] === '0' &&
-//           this.values[(row - 1) * this.width + column] !== true)
-//       {
-//         //console.log('up', row, column, (row * this.width) + column)
-//         if (this.values[(row - 1) * this.width + column] === 0) {
-//           this.board[row - 1][column] = '    ';
-//         } else {
-//           this.board[row - 1][column]= '  ' + this.values[((row - 1) * this.width) + column] +  ' ';
-//         }
-
-// //	this.board[row - 1][column] = '    ';
-//         this.expand(row - 1, column);
-//       }
-//     }
-
-//     //left
-//     if (this.board[row][column - 1] !== undefined && 
-//         this.board[row][column - 1] !== '    ' &&
-//         this.board[row][column - 1][0] === '0' &&
-//         this.values[row * this.width + column - 1] !== true /*&&
-//     this.board[row][column - 1][0] === '0' */)
-//     {
-//       //console.log('left', row, column, (row * this.width) + column - 1)
-//         if (this.values[(row * this.width) + column - 1] === 0) {
-//           this.board[row][column - 1] = '    ';
-//         } else {
-//           this.board[row][column -1 ]= '  ' + this.values[(row * this.width) + column - 1] +  ' ';
-//         }
-
-// //	this.board[row][column - 1] = '    ';
-//         this.expand(row, column - 1);
-//     }
-
-//     //right
-//     if (this.board[row][column + 1] !== undefined &&
-//         this.board[row][column + 1] !== '    ' &&
-//         this.board[row][column + 1][0] === '0' &&
-//         this.values[row * this.width + column + 1] !== true /*&&
-//     this.board[row][column - 1][0] === '0'*/)
-//     {
-//       //console.log('right', row, column, (row * this.width) + column)
-//         if (this.values[(row * this.width) + column + 1] === 0) {
-//           this.board[row][column + 1] = '    ';
-//         } else {
-//           this.board[row][column + 1]= '  ' + this.values[(row * this.width) + column + 1] +  ' ';
-//         }
-
-// //	this.board[row][column + 1] = '    ';
-//         this.expand(row, column + 1);
-//     }
-
-//     //down
-//     if (this.board[row + 1] !== undefined) {
-//       if (this.board[row + 1][column] !== undefined &&
-//           this.board[row + 1][column] !== '    '  &&
-//           this.board[row + 1][column][0] === '0' &&
-//           this.values[(row + 1) * this.width + column] !== true /*&&
-//       this.board[row][column - 1][0] === '0'*/)
-//       {
-//         //console.log('down', row, column, (row * this.width) + column)
-//         if (this.values[((row + 1) * this.width) + column] === 0) {
-//           this.board[row + 1][column] = '    ';
-//         } else {
-//           this.board[row + 1][column]= '  ' + this.values[((row + 1) * this.width) + column] +  ' ';
-//         }
-
-
-// //	this.board[row + 1][column] = '    ';
-//         this.expand(row + 1, column);
-//       }
-//     }
-//   }
-  
   setUp() {
-    document.getElementById("minesweeper").firstElementChild.children[0].innerText = this.mines;          
+    document.getElementById("minesweeper").firstElementChild.children[0].innerText = this.mines;
+    document.getElementById('reset').innerText = '😁';          
     this.createValues();
     this.createBoard();
     this.displayBoard();
@@ -357,10 +247,9 @@ class MineSweeper {
   }
 }
 
-
 document.getElementById("minesweeper").addEventListener("click", function(item) {
   if (item.target.classList.contains('section') && item.target.classList.contains('clicked') === false
-  && item.target.classList.contains('mine') === false) {
+  && item.target.classList.contains('mine') === false && newGame.gameover === false) {
     if(newGame.gameClock === null) {
       newGame.startTimer();
     }
@@ -369,17 +258,48 @@ document.getElementById("minesweeper").addEventListener("click", function(item) 
   }
   if (item.target.id === 'reset') {
     newGame.stopTimer();
-    newGame = new MineSweeper(200, 20, 20);
+    newGame = new MineSweeper(Number(newGame.mines), Number(newGame.height), Number(newGame.width));
     document.getElementById("minesweeper").firstElementChild.children[2].innerText = 0;
+    newGame.gameover = false;
+    newGame.setUp();
+  }
+  if (item.target.textContent === 'Cancel') {
+    item.target.parentElement.style.height = '20px';    
+  }
+  if (item.target.textContent === 'Start') {
+    //item.target.parentElement.id === 'newGame' || item.target.id === 'newGame' && 
+    console.log(item.target.textContent === 'Start');
+    item.preventDefault();
+    
+    let mines = Number(this.children[1][0].value);
+    isNaN(mines) ? mines = 0 : mines;
+    mines < 0 ? mines = 0 : mines;
 
+    let height = Number(this.children[1][1].value);
+    isNaN(height) ? height = 1 : height;
+    height < 1 ? height = 1 : height;
+
+    let width = Number(this.children[1][2].value); 
+    isNaN(width) ? width = 5 : width;
+    width < 5 ? width = 5 : width;
+   
+    newGame.stopTimer();
+    newGame = new MineSweeper(mines, height, width);
+    item.target.parentElement.style.height = '20px';
+    document.getElementById("minesweeper").firstElementChild.children[2].innerText = 0;
     this.gameover = false;
     newGame.setUp();
+  }
+  if (item.target.innerText === 'Custom') {
+    item.target.parentElement.parentElement.style.height !== '150px' ? 
+      item.target.parentElement.parentElement.style.height = '150px' : 
+      item.target.parentElement.parentElement.style.height = '20px';
   }
 })
 
 document.getElementById("minesweeper").addEventListener( "contextmenu", function(e) {
   e.preventDefault();
-  if (e.target.classList.contains('clicked') === false && e.target.classList.contains('section')) {
+  if (e.target.classList.contains('clicked') === false && e.target.classList.contains('section') && newGame.gameover === false) {
     if(e.target.classList.contains('mine')) {
       e.target.innerHTML = '&nbsp';
       e.target.classList.remove('mine');
@@ -393,35 +313,5 @@ document.getElementById("minesweeper").addEventListener( "contextmenu", function
   }
 });
 
-var newGame = new MineSweeper(13, 9, 7);
+var newGame = new MineSweeper(10, 4, 5);
 newGame.setUp();
-
-
-// console.log(test.values);
-// test.selectSquare(1);
-// test.selectSquare(2);
-// test.selectSquare(3);
-// test.selectSquare(4);
-// test.selectSquare(5);
-// test.selectSquare(6);
-// test.selectSquare(7);
-// test.selectSquare(8);
-// test.selectSquare(9);
-// test.selectSquare(10);
-// test.selectSquare(11);
-// test.selectSquare(12);
-// test.selectSquare(13);
-// test.selectSquare(14);
-// test.selectSquare(15);
-// test.selectSquare(16);
-// test.selectSquare(17);
-// test.selectSquare(18);
-// test.selectSquare(19);
-// test.selectSquare(20);
-
-
-//<button class="unchosen blank"></button>
-//<button class="unchosen flag"></button>
-//<button class="chosen"></button>
-
-
