@@ -148,7 +148,6 @@ class MineSweeper {
     num = Number(num);
     if (num % this.width !== 0) {
       if (this.clicked[num - this.width - 1] === false) {
-        console.log(this.values[num - this.width - 1 ])
         this.expand(num - this.width - 1);
       }
       if (this.clicked[num - 1] === false) {
@@ -287,5 +286,5 @@ document.getElementById("minesweeper").addEventListener( "contextmenu", function
   }
 });
 
-var newGame = new MineSweeper(10, 4, 5);
+var newGame = new MineSweeper(10, 8, 8);
 newGame.setUp();
