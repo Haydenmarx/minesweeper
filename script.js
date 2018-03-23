@@ -26,7 +26,6 @@ class MineSweeper {
     while (minesLeft > 0) {
       let selection = Math.floor(Math.random() * potentialMines.length);
       this.values[potentialMines[selection]] = true;
-      console.log('mine =', potentialMines[selection]);
       if (potentialMines[selection] === 0) {
         // console.log('upper left')
         this.setClues(potentialMines[selection], false, false, false, false, true, false, true, true);
@@ -56,7 +55,7 @@ class MineSweeper {
         this.setClues(potentialMines[selection], true, true, true, true, true, true, true, true);
       }
       // console.log(potentialMines[selection], this.values);
-      this.displayValues();
+      // this.displayValues();
       potentialMines.splice(selection, 1);
       minesLeft--;         
     }
@@ -105,18 +104,9 @@ class MineSweeper {
     }
   }
 
-  displayValues () {
-    console.log('--------------------------------')
-    console.log('|', this.values[0], '|', this.values[1], '|', this.values[2], '|', this.values[3], '|')
-    console.log('|', this.values[4], '|', this.values[5], '|', this.values[6], '|', this.values[7], '|',)
-    console.log('|', this.values[8], '|', this.values[9], '|', this.values[10], '|', this.values[11], '|',)
-    console.log('--------------------------------')
-  }
-
   displayBoard () {
     let game = document.getElementById("minesweeper");
     let gameboard = game.children[2];
-    console.log('test', game.children);
     game.style.width = this.width * 30 + 'px';
     document.getElementById("reset").style.marginLeft = (this.width * 30)/2 - 65 +'px';
     let squares = "";
@@ -129,9 +119,7 @@ class MineSweeper {
   selectSquare(num) {
     let square = 'square' + num;
     let selection = document.getElementById(square);
-    console.log(this.values);
     this.clicked[num] = true;
-    console.log(this.clicked, num, this.clicked[num]);
     
     if (this.values[num] === true) {
       this.stopTimer();
@@ -143,85 +131,73 @@ class MineSweeper {
     } else {
       if (this.values[num] === 0) {
         selection.innerHTML = '&nbsp';
-        this.expand(num);
+        this.Omniexpand(num);
       } else {
         selection.innerText = this.values[num];
       }
       this.squaresLeft--;
+      if (this.squaresLeft === 0) {
+        document.getElementById('reset').innerText = '😎';
+        this.stopTimer();
+        this.gameover = true;
+      }
     }
   }
+  
+  Omniexpand(num) {
+    num = Number(num);
+    if (num % this.width !== 0) {
+      if (this.clicked[num - this.width - 1] === false) {
+        console.log(this.values[num - this.width - 1 ])
+        this.expand(num - this.width - 1);
+      }
+      if (this.clicked[num - 1] === false) {
+        this.expand(num - 1);
+      }
+      if (this.clicked[num + this.width - 1] === false) {
+        this.expand(num + this.width - 1);
+      }
+    }
+    if (this.clicked[num - this.width] === false) {
+      this.expand(num - this.width);
+    }
+    if (this.clicked[num + this.width] === false) {
+      this.expand(num + this.width);
+    }
+
+    if ((num + 1) % this.width !== 0) {
+      if (this.clicked[num - this.width + 1] === false) {
+        this.expand(num - this.width + 1);
+      }
+      if (this.clicked[num + 1] === false) {
+        this.expand(num + 1);
+      }
+      if (this.clicked[num + this.width + 1] === false) {
+        this.expand(num + this.width + 1); 
+      }
+    }
+       
+  }
+
 
   expand(num) {
-    num = Number(num);
-
-    //up
-    if (this.clicked[num - this.width] === false && this.values[num - this.width] !== true) {
-      let square = 'square' + (num - this.width);
-      let selection = document.getElementById(square);
-      if (this.values[num - this.width] === 0) {
-        selection.innerHTML = '&nbsp';
-        this.expand(num - this.width);
-      } else {
-        selection.innerText = this.values[num - this.width];
-      }
-      selection.className += " clicked";
-      this.squaresLeft--;          
-      this.clicked[num - this.width] = true;
-      // this.expand(num - this.width);
+    let square = 'square' + (num);
+    let selection = document.getElementById(square);
+    if (this.values[num] === 0) {
+      selection.innerHTML = '&nbsp';
+    } else if (
+      this.values[num] !== true &&
+      this.values[num] !== undefined
+    ) {
+      selection.innerText = this.values[num];
+    } else {
+      return false;
     }
-
-    //left
-    if (this.clicked[num - 1] === false && this.values[num - 1] !== true && num % this.width !== 0) {
-      let square = 'square' + (num - 1);
-      let selection = document.getElementById(square);
-      if (this.values[num - 1] === 0) {
-        selection.innerHTML = '&nbsp';
-        this.expand(num - 1);
-      } else {
-        selection.innerText = this.values[num - 1];
-      }
-      selection.className += " clicked";
-      this.squaresLeft--;          
-      this.clicked[num - 1] = true;
-      // this.expand(num - 1);
-    }
-
-    //right
-    if (this.clicked[num + 1] === false && this.values[num + 1] !== true && (num + 1) % this.width !== 0) {
-      let square = 'square' + (num + 1);
-      let selection = document.getElementById(square);
-      if (this.values[num + 1] === 0) {
-        selection.innerHTML = '&nbsp';
-        this.expand(num + 1);
-      } else {
-        selection.innerText = this.values[num + 1];
-      }
-      selection.className += " clicked";
-      this.squaresLeft--;        
-      this.clicked[num + 1] = true;
-      // this.expand(num + 1);
-    }
-
-    //down
-    if (this.clicked[num + this.width] === false && this.values[num + this.width] !== true) {
-      let square = 'square' + (num + this.width);
-      let selection = document.getElementById(square);
-      if (this.values[num + this.width] === 0) {
-        selection.innerHTML = '&nbsp';
-        this.expand(num + this.width);
-      } else {
-        selection.innerText = this.values[num + this.width];
-      }
-      selection.className += " clicked";
-      this.squaresLeft--;    
-      this.clicked[num + this.width] = true;
-      // this.expand(num + this.width);
-    }
-    console.log(this.squaresLeft);
-    if (this.squaresLeft === 0) {
-      document.getElementById('reset').innerText = '😎';
-      this.stopTimer();
-      this.gameover = true;
+    selection.className += " clicked";
+    this.squaresLeft--;          
+    this.clicked[num] = true;
+    if (this.values[num] === 0) {
+      this.Omniexpand(num);
     }
   }
 
@@ -267,8 +243,6 @@ document.getElementById("minesweeper").addEventListener("click", function(item) 
     item.target.parentElement.style.height = '20px';    
   }
   if (item.target.textContent === 'Start') {
-    //item.target.parentElement.id === 'newGame' || item.target.id === 'newGame' && 
-    console.log(item.target.textContent === 'Start');
     item.preventDefault();
     
     let mines = Number(this.children[1][0].value);
