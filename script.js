@@ -6,12 +6,10 @@ class MineSweeper {
     this.time = 0;
     this.gameClock = null;
     this.gameover = false;
-    this.size = 'small';
     this.width = width;
     this.height = height;
     this.values = [];
     this.clicked = [];
-    this.board = [];
   }
 
   createValues() {
@@ -244,17 +242,17 @@ document.getElementById("minesweeper").addEventListener("click", function(item) 
   if (item.target.textContent === 'Start') {
     item.preventDefault();
     
-    let mines = Number(this.children[1][0].value);
+    let mines = Number(this.children[1][5].value);
     isNaN(mines) ? mines = 0 : mines;
     mines < 0 ? mines = 0 : mines;
 
-    let height = Number(this.children[1][1].value);
+    let height = Number(this.children[1][6].value);
     isNaN(height) ? height = 1 : height;
     height < 1 ? height = 1 : height;
 
-    let width = Number(this.children[1][2].value); 
-    isNaN(width) ? width = 5 : width;
-    width < 5 ? width = 5 : width;
+    let width = Number(this.children[1][7].value); 
+    isNaN(width) ? width = 6 : width;
+    width < 6 ? width = 6 : width;
    
     newGame.stopTimer();
     newGame = new MineSweeper(mines, height, width);
@@ -263,12 +261,54 @@ document.getElementById("minesweeper").addEventListener("click", function(item) 
     this.gameover = false;
     newGame.setUp();
   }
+  if (item.target.name === 'size') {
+    let selection = item.target.id[4];
+    console.log();
+    switch (selection) {
+      case '1':
+        this.children[1][5].disabled = false;
+        this.children[1][6].disabled = false;
+        this.children[1][7].disabled = false;
+        break;
+      case '2':
+        this.children[1][5].value = 10;
+        this.children[1][6].value = 8;
+        this.children[1][7].value = 8;
+        this.children[1][5].disabled = true;
+        this.children[1][6].disabled = true;
+        this.children[1][7].disabled = true;
+        break;
+      case '3':
+        this.children[1][5].value = 40;
+        this.children[1][6].value = 16;
+        this.children[1][7].value = 16;
+        this.children[1][5].disabled = true;
+        this.children[1][6].disabled = true;
+        this.children[1][7].disabled = true;
+        break;
+      case '4':
+        this.children[1][5].value = 99;
+        this.children[1][6].value = 16;
+        this.children[1][7].value = 30;
+        this.children[1][5].disabled = true;
+        this.children[1][6].disabled = true;
+        this.children[1][7].disabled = true;
+        break;        
+      default:
+        break;
+    } 
+  }
   if (item.target.innerText === 'Custom') {
-    item.target.parentElement.parentElement.style.height !== '150px' ? 
-      item.target.parentElement.parentElement.style.height = '150px' : 
+    item.target.parentElement.parentElement.style.height !== '175px' ? 
+      item.target.parentElement.parentElement.style.height = '175px' : 
       item.target.parentElement.parentElement.style.height = '20px';
   }
 })
+
+// document.getElementById("minesweeper").addEventListener( "mousedown", function(e) {
+//   let smiley = document.getElementById('reset');
+//   smiley.innerText === '🤔' ? smiley.innerText = '😁' : smiley.innerText = '🤔';
+// });
 
 document.getElementById("minesweeper").addEventListener( "contextmenu", function(e) {
   e.preventDefault();

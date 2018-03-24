@@ -7,24 +7,26 @@
     <!-- 😎😄😁😂😆🤔😣☹☹️ -->
     <form id="newGame" draggable="true">
       <div>
-        <p>Custom</p>
-        <!-- <button>X</button> -->
+        <p>Custom</p> <!-- | High Score -->
       </div>
-      <!-- * | S | M | L | XL -->
-
-      <!-- * | S | M  -->      
-      <!--   L | XL -->                  
-
-      <!-- Custom | Small | Medium | Large | XL -->
-      <!-- As Radio Buttons. Non-custom disables inputs -->
+      <fieldset>
+        <input type="radio" id="size1" name="size" value="custom" />
+        <label for="size1">*</label>
+        <input type="radio" id="size2" name="size" value="small" checked />
+        <label for="size2">S</label>
+        <input type="radio" id="size3" name="size" value="medium" />
+        <label for="size3">M</label>
+        <input type="radio" id="size4" name="size" value="large" />
+        <label for="size4">L</label>
+      </fieldset>  
       <label>Mines:&nbsp;</label>
-      <input/>
+      <input class="longbox" disabled />
       <br>
       <label>Height:</label>
-      <input/>
+      <input class="longbox" disabled />
       <br>
       <label>Width:&nbsp;</label>
-      <input/>
+      <input class="longbox" disabled />
       <br>
       <button type="submit">Start</button><button type="reset">Cancel</button>
     </form>
