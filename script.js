@@ -52,8 +52,6 @@ class MineSweeper {
         //console.log('middle');
         this.setClues(potentialMines[selection], true, true, true, true, true, true, true, true);
       }
-      // console.log(potentialMines[selection], this.values);
-      // this.displayValues();
       potentialMines.splice(selection, 1);
       minesLeft--;         
     }
