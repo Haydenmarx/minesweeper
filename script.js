@@ -101,11 +101,11 @@ class MineSweeper {
   }
 
   displayBoard () {
-    let game = document.getElementById("minesweeper");
+    let game = document.getElementById('minesweeper');
     let gameboard = game.children[2];
     game.style.width = this.width * 30 + 'px';
-    document.getElementById("reset").style.marginLeft = (this.width * 30)/2 - 65 +'px';
-    let squares = "";
+    document.getElementById('reset').style.marginLeft = (this.width * 30)/2 - 65 +'px';
+    let squares = '';
     for (var x = 0; x < this.width * this.height; x++) {
       squares +='<button id="square' + x + '" class="section">&nbsp</button>';
     }
@@ -124,6 +124,7 @@ class MineSweeper {
       selection.innerText = '*';
       selection.style.background = 'red';
       selection.style.borderColor = 'red';
+      this.displayMines();
     } else {
       if (this.values[num] === 0) {
         selection.innerHTML = '&nbsp';
@@ -189,7 +190,7 @@ class MineSweeper {
       } else {
         return false;
       }
-      selection.className += " clicked";
+      selection.className += ' clicked';
       this.squaresLeft--;          
       this.clicked[num] = true;
       if (this.values[num] === 0) {
@@ -198,8 +199,24 @@ class MineSweeper {
     }
   }
 
+  displayMines() {
+    this.values.forEach((mine, index) => {
+      let selection = document.getElementById('square' + index);
+      if (selection.innerText !== '*' && mine === true) {
+        if (selection.innerText === '!') {
+          selection.style.background = 'lightgreen';
+          selection.style.borderColor = 'rgba(00,00,00,.0)';
+        } else {
+          selection.style.background = 'lightsalmon';
+          selection.style.borderColor = 'rgba(00,00,00,.0)';
+        }
+        selection.innerText = '*';
+      } 
+    })
+  }
+
   setUp() {
-    document.getElementById("minesweeper").firstElementChild.children[0].innerText = this.mines;
+    document.getElementById('minesweeper').firstElementChild.children[0].innerText = this.mines;
     document.getElementById('reset').innerText = '😁';          
     this.createValues();
     this.createBoard();
@@ -210,7 +227,7 @@ class MineSweeper {
     
     this.gameClock = setInterval(()=>{
       this.time++;
-      document.getElementById("minesweeper").firstElementChild.children[2].innerText = this.time;
+      document.getElementById('minesweeper').firstElementChild.children[2].innerText = this.time;
     },1000)
 
   }
@@ -220,19 +237,19 @@ class MineSweeper {
   }
 }
 
-document.getElementById("minesweeper").addEventListener("click", function(item) {
+document.getElementById('minesweeper').addEventListener('click', function(item) {
   if (item.target.classList.contains('section') && item.target.classList.contains('clicked') === false
   && item.target.classList.contains('mine') === false && newGame.gameover === false) {
     if(newGame.gameClock === null) {
       newGame.startTimer();
     }
-    item.target.className += " clicked";
+    item.target.className += ' clicked';
     newGame.selectSquare(item.target.id.slice(6));   
   }
   if (item.target.id === 'reset') {
     newGame.stopTimer();
     newGame = new MineSweeper(Number(newGame.mines), Number(newGame.height), Number(newGame.width));
-    document.getElementById("minesweeper").firstElementChild.children[2].innerText = 0;
+    document.getElementById('minesweeper').firstElementChild.children[2].innerText = 0;
     newGame.gameover = false;
     newGame.setUp();
   }
@@ -257,7 +274,7 @@ document.getElementById("minesweeper").addEventListener("click", function(item) 
     newGame.stopTimer();
     newGame = new MineSweeper(mines, height, width);
     item.target.parentElement.style.height = '20px';
-    document.getElementById("minesweeper").firstElementChild.children[2].innerText = 0;
+    document.getElementById('minesweeper').firstElementChild.children[2].innerText = 0;
     this.gameover = false;
     newGame.setUp();
   }
@@ -305,22 +322,17 @@ document.getElementById("minesweeper").addEventListener("click", function(item) 
   }
 })
 
-// document.getElementById("minesweeper").addEventListener( "mousedown", function(e) {
-//   let smiley = document.getElementById('reset');
-//   smiley.innerText === '🤔' ? smiley.innerText = '😁' : smiley.innerText = '🤔';
-// });
-
-document.getElementById("minesweeper").addEventListener( "contextmenu", function(e) {
+document.getElementById('minesweeper').addEventListener( 'contextmenu', function(e) {
   e.preventDefault();
   if (e.target.classList.contains('clicked') === false && e.target.classList.contains('section') && newGame.gameover === false) {
     if(e.target.classList.contains('mine')) {
       e.target.innerHTML = '&nbsp';
       e.target.classList.remove('mine');
-      document.getElementById("minesweeper").firstElementChild.children[0].innerText = Number(document.getElementById("minesweeper").firstElementChild.children[0].innerText) + 1;      
+      document.getElementById('minesweeper').firstElementChild.children[0].innerText = Number(document.getElementById('minesweeper').firstElementChild.children[0].innerText) + 1;      
     } else {
       e.target.className += ' mine';
       e.target.innerText = '!';
-      document.getElementById("minesweeper").firstElementChild.children[0].innerText -= 1;      
+      document.getElementById('minesweeper').firstElementChild.children[0].innerText -= 1;      
       
     }
   }
