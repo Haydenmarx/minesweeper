@@ -202,6 +202,7 @@ class MineSweeper {
   displayMines() {
     this.values.forEach((mine, index) => {
       let selection = document.getElementById('square' + index);
+      selection.className += ' clicked';
       if (selection.innerText !== '*' && mine === true) {
         if (selection.innerText === '!') {
           selection.style.background = 'lightgreen';
