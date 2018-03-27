@@ -178,21 +178,23 @@ class MineSweeper {
   expand(num) {
     let square = 'square' + (num);
     let selection = document.getElementById(square);
-    if (this.values[num] === 0) {
-      selection.innerHTML = '&nbsp';
-    } else if (
-      this.values[num] !== true &&
-      this.values[num] !== undefined
-    ) {
-      selection.innerText = this.values[num];
-    } else {
-      return false;
-    }
-    selection.className += " clicked";
-    this.squaresLeft--;          
-    this.clicked[num] = true;
-    if (this.values[num] === 0) {
-      this.Omniexpand(num);
+    if (!selection.classList.contains('mine')) {
+      if (this.values[num] === 0) {
+        selection.innerHTML = '&nbsp';
+      } else if (
+        this.values[num] !== true &&
+        this.values[num] !== undefined
+      ) {
+        selection.innerText = this.values[num];
+      } else {
+        return false;
+      }
+      selection.className += " clicked";
+      this.squaresLeft--;          
+      this.clicked[num] = true;
+      if (this.values[num] === 0) {
+        this.Omniexpand(num);
+      }
     }
   }
 
