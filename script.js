@@ -212,7 +212,10 @@ class MineSweeper {
           selection.style.borderColor = 'rgba(00,00,00,.0)';
         }
         selection.innerText = '*';
-      } 
+      }
+      if (selection.innerText === '!' && mine !== true) {
+        selection.style.color = 'red';
+      }
     })
   }
 
