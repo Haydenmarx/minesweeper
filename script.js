@@ -124,7 +124,7 @@ class MineSweeper {
       selection.innerText = '*';
       selection.style.background = 'red';
       selection.style.borderColor = 'red';
-      setTimeout(()=>{this.displayMines();}, 0)      
+      setTimeout(()=>{this.displayMines();}, 100)      
     } else {
       if (this.values[num] === 0) {
         selection.innerHTML = '&nbsp';
