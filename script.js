@@ -10,6 +10,7 @@ class MineSweeper {
     this.height = height;
     this.values = [];
     this.clicked = [];
+    this.doubleClick = undefined;
   }
 
   createValues() {
@@ -175,6 +176,74 @@ class MineSweeper {
        
   }
 
+  mineCheck(num, total) {
+    num = Number(num);
+    let mines = 0;
+    if (num % this.width !== 0) {
+      if (this.clicked[num - this.width - 1] === false) {
+        let square = 'square' + (num - this.width - 1);
+        let selection = document.getElementById(square);
+        if (selection.classList.contains('mine')) {
+          mines++;
+        }
+      }
+      if (this.clicked[num - 1] === false) {
+        let square = 'square' + (num - 1);
+        let selection = document.getElementById(square);
+        if (selection.classList.contains('mine')) {         
+          mines++;
+        }
+      }
+      if (this.clicked[num + this.width - 1] === false) {
+        let square = 'square' + (num + this.width - 1);
+        let selection = document.getElementById(square);
+        if (selection.classList.contains('mine')) {         
+          mines++;
+        }
+      }
+    }
+    if (this.clicked[num - this.width] === false) {
+      let square = 'square' + (num - this.width);
+      let selection = document.getElementById(square);
+      if (selection.classList.contains('mine')) {       
+        mines++;
+      }
+    }
+    if (this.clicked[num + this.width] === false) {
+      let square = 'square' + (num + this.width);
+      let selection = document.getElementById(square);
+      if (selection.classList.contains('mine')) {       
+        mines++;
+      }
+    }
+
+    if ((num + 1) % this.width !== 0) {
+      if (this.clicked[num - this.width + 1] === false) {
+        let square = 'square' + (num - this.width + 1);
+        let selection = document.getElementById(square);
+        if (selection.classList.contains('mine')) {
+          mines++;
+        }
+      }
+      if (this.clicked[num + 1] === false) {
+        let square = 'square' + (num + 1);
+        let selection = document.getElementById(square);
+        if (selection.classList.contains('mine')) {
+          mines++;
+        }
+      }
+      if (this.clicked[num + this.width + 1] === false) {
+        let square = 'square' + (num + this.width + 1);
+        let selection = document.getElementById(square);
+        if (selection.classList.contains('mine')) {
+          mines++;
+        }
+      }
+    }
+    console.log(mines, total);
+    return mines >= total;
+  }
+
 
   expand(num) {
     let square = 'square' + (num);
@@ -187,6 +256,17 @@ class MineSweeper {
         this.values[num] !== undefined
       ) {
         selection.innerText = this.values[num];
+      } else if (
+        this.values[num] === true &&
+        this.values[num] !== undefined
+      ) {
+        this.stopTimer();
+        this.gameover = true;
+        document.getElementById('reset').innerText = '😆';
+        selection.innerText = '*';
+        selection.style.background = 'red';
+        selection.style.borderColor = 'red';
+        setTimeout(()=>{this.displayMines();}, 100)             
       } else {
         return false;
       }
@@ -249,6 +329,27 @@ document.getElementById('minesweeper').addEventListener('click', function(item) 
     }
     item.target.className += ' clicked';
     newGame.selectSquare(item.target.id.slice(6));   
+  } else if (
+            item.target.classList.contains('section') &&
+            item.target.classList.contains('clicked') &&
+            item.target.innerHTML !== '&nbsp;' &&
+            newGame.gameover === false
+            )
+  {
+    let selected = item.target.id.slice(6)
+    if (newGame.doubleClick !== selected) {     
+      newGame.doubleClick = selected;
+    } else {
+      //if mines are set
+     if (newGame.mineCheck(selected, item.target.innerHTML)) {
+      newGame.Omniexpand(selected);
+      if (newGame.squaresLeft === 0) {
+        document.getElementById('reset').innerText = '😎';
+        newGame.stopTimer();
+        newGame.gameover = true;
+      }
+     };
+    }
   }
   if (item.target.id === 'reset') {
     newGame.stopTimer();
@@ -284,7 +385,6 @@ document.getElementById('minesweeper').addEventListener('click', function(item) 
   }
   if (item.target.name === 'size') {
     let selection = item.target.id[4];
-    console.log();
     switch (selection) {
       case '1':
         this.children[1][5].disabled = false;
