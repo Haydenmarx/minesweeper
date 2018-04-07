@@ -117,20 +117,22 @@ class MineSweeper {
     let square = 'square' + num;
     let selection = document.getElementById(square);
     this.clicked[num] = true;
-    
+    let test = 'square' + (num - this.width);
     if (this.values[num] === true) {
       this.stopTimer();
       this.gameover = true;
       document.getElementById('reset').innerText = '😆';
-      selection.innerText = '*';
+      selection.innerHTML = '<p>💣</p>';
+      selection.className += ' bomb';    
       selection.style.background = 'red';
-      selection.style.borderColor = 'red';
+      // selection.style.borderColor = 'red';
       setTimeout(()=>{this.displayMines();}, 100)      
     } else {
       if (this.values[num] === 0) {
         selection.innerHTML = '&nbsp';
-        this.Omniexpand(num);
+        this.Omniexpand(num, selection);
       } else {
+        selection.className += ' mine' + this.values[num];
         selection.innerText = this.values[num];
       }
       this.squaresLeft--;
@@ -142,7 +144,7 @@ class MineSweeper {
     }
   }
   
-  Omniexpand(num) {
+  Omniexpand(num, selected) {
     num = Number(num);
     if (num % this.width !== 0) {
       if (this.clicked[num - this.width - 1] === false) {
@@ -240,7 +242,6 @@ class MineSweeper {
         }
       }
     }
-    console.log(mines, total);
     return mines >= total;
   }
 
@@ -255,6 +256,7 @@ class MineSweeper {
         this.values[num] !== true &&
         this.values[num] !== undefined
       ) {
+        selection.className += ' mine' + this.values[num];
         selection.innerText = this.values[num];
       } else if (
         this.values[num] === true &&
@@ -263,9 +265,10 @@ class MineSweeper {
         this.stopTimer();
         this.gameover = true;
         document.getElementById('reset').innerText = '😆';
-        selection.innerText = '*';
+        selection.innerHTML = '<p>💣</p>';
+        selection.className += ' bomb';
         selection.style.background = 'red';
-        selection.style.borderColor = 'red';
+        // selection.style.borderColor = 'red';
         setTimeout(()=>{this.displayMines();}, 100)             
       } else {
         return false;
@@ -274,7 +277,7 @@ class MineSweeper {
       this.squaresLeft--;          
       this.clicked[num] = true;
       if (this.values[num] === 0) {
-        this.Omniexpand(num);
+        this.Omniexpand(num, selection);
       }
     }
   }
@@ -283,17 +286,19 @@ class MineSweeper {
     this.values.forEach((mine, index) => {
       let selection = document.getElementById('square' + index);
       selection.className += ' clicked';
-      if (selection.innerText !== '*' && mine === true) {
+      if (selection.innerHTML !== '<p>💣</p>' && mine === true) {
         if (selection.innerText === '!') {
           selection.style.background = 'lightgreen';
-          selection.style.borderColor = 'rgba(00,00,00,.0)';
+          // selection.style.borderColor = 'rgba(00,00,00,.0)';
         } else {
           selection.style.background = 'lightsalmon';
-          selection.style.borderColor = 'rgba(00,00,00,.0)';
+          // selection.style.borderColor = 'rgba(00,00,00,.0)';
         }
-        selection.innerText = '*';
+        selection.innerHTML = '<p>💣</p>';
+        selection.className += ' bomb';
       }
       if (selection.innerText === '!' && mine !== true) {
+        selection.style.background = 'lightsalmon';
         selection.style.color = 'red';
       }
     })
@@ -432,12 +437,13 @@ document.getElementById('minesweeper').addEventListener( 'contextmenu', function
     if(e.target.classList.contains('mine')) {
       e.target.innerHTML = '&nbsp';
       e.target.classList.remove('mine');
+      e.target.style.backgroundColor = 'grey';
       document.getElementById('minesweeper').firstElementChild.children[0].innerText = Number(document.getElementById('minesweeper').firstElementChild.children[0].innerText) + 1;      
     } else {
       e.target.className += ' mine';
       e.target.innerText = '!';
+      e.target.style.backgroundColor = '#ffeb3bf2';      
       document.getElementById('minesweeper').firstElementChild.children[0].innerText -= 1;      
-      
     }
   }
 });
